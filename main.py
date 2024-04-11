@@ -2,7 +2,6 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import os
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
@@ -201,7 +200,7 @@ class Scraper():
         # order the data by score in descending order
         self.data.sort(key=lambda x: x["score"], reverse=True)
         # ordenar por menor precio
-        self.data.sort(key=lambda x: x["price"])
+        self.data.sort(key=lambda x: x["discounted_price"])
         # keep only the top 10
         self.data = self.data[:10]
         # export to a csv
@@ -212,7 +211,7 @@ class Scraper():
         # Ordenar los datos por puntaje en orden descendente
         self.data.sort(key=lambda x: x["score"], reverse=True)
         # ordenar por menor precio
-        self.data.sort(key=lambda x: x["price"])
+        self.data.sort(key=lambda x: x["discounted_price"])
         # Mantener solo los 10 mejores
         top_10_data = self.data[:10]
 
