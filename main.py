@@ -15,6 +15,12 @@ class Scraper():
         product_name = input("\nProducto: ")
         # Clean the user input
         cleaned_name = product_name.replace(" ", "-").lower()
+         # Get excluded words
+        excluded_words_input = input("Palabras excluidas (separadas por coma y/o espacio): ")
+        if excluded_words_input:
+            excluded_words = re.split(r',\s*|\s+', excluded_words_input)
+        else:
+            excluded_words = []
         # Create the urls to scrap
         urls = ['https://listado.mercadolibre.com.ar/' + cleaned_name]
 
@@ -49,6 +55,8 @@ class Scraper():
             for post in content:
                 # get the title
                 title = post.find('h2').text
+                if any(word in title.lower() for word in excluded_words):
+                    continue
                 print(f"\n{c}. {title}")
                 # get the price
                 price = post.find('span', class_='andes-money-amount__fraction').text
@@ -192,6 +200,8 @@ class Scraper():
     def export_to_csv(self):
         # order the data by score in descending order
         self.data.sort(key=lambda x: x["score"], reverse=True)
+        # ordenar por menor precio
+        self.data.sort(key=lambda x: x["price"])
         # keep only the top 10
         self.data = self.data[:10]
         # export to a csv
@@ -201,6 +211,8 @@ class Scraper():
     def export_to_pdf(self):
         # Ordenar los datos por puntaje en orden descendente
         self.data.sort(key=lambda x: x["score"], reverse=True)
+        # ordenar por menor precio
+        self.data.sort(key=lambda x: x["price"])
         # Mantener solo los 10 mejores
         top_10_data = self.data[:10]
 
